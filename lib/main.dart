@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "LoginApp",
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LogoPage(),
       builder: EasyLoading.init(),
     );
   }

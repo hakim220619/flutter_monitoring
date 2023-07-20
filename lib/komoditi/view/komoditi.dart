@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:monitoring/home/menu_page.dart';
-
-// import 'package:plavon/product/service/service_product.dart';
+import 'package:monitoring/home/view/home.dart';
+import 'package:monitoring/komoditi/view/count_comoditi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:http/http.dart' as http;
 
 class KomodityPage extends StatefulWidget {
   const KomodityPage({super.key});
@@ -15,118 +13,137 @@ class KomodityPage extends StatefulWidget {
   State<KomodityPage> createState() => _KomodityPageState();
 }
 
+List _get = [];
+
 class _KomodityPageState extends State<KomodityPage> {
-  List _get = [];
-  Future barang() async {
+  Future riwayatTiket() async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
+
       var token = preferences.getString('token');
-      var url = Uri.parse('https://plavon.dlhcode.com/api/barang');
-      final response = await http.get(url, headers: {
+      var _riwayatTiket =
+          Uri.parse('https://monitoring.dlhcode.com/api/komoditi');
+      http.Response response = await http.get(_riwayatTiket, headers: {
         "Accept": "application/json",
         "Authorization": "Bearer " + token.toString(),
       });
-      // print(response.body);
+      // print(id_user);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // print(data);
+// print(data['data']);
         setState(() {
           _get = data['data'];
-          // print(_get);
+          print(_get);
         });
+        // print(_get[0]['order_id']);
+
+        // print(data);
       }
     } catch (e) {
       print(e);
     }
   }
 
+  Future refresh() async {
+    setState(() {
+      riwayatTiket();
+    });
+  }
+
   void initState() {
     super.initState();
-    barang();
+    riwayatTiket();
+    refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RefreshIndicator(
-          onRefresh: barang,
-          child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(
+                "Rekap Hasil Komoditi",
+                style: TextStyle(fontSize: 30),
               ),
-              itemCount: _get.length,
-              itemBuilder: (_, i) => Card(
-                    child: Container(
-                      height: 290,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)),
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(5),
-                      child: Stack(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (
-                              //       context,
-                              //     ) =>
-                              //             DetailProduct(
-                              //               id: _get[i]['id'],
-                              //               user_id: _get[i]['user_id'],
-                              //               nama_barang: _get[i]['nama_barang'],
-                              //               jenis: _get[i]['jenis'],
-                              //               stok: _get[i]['stok'],
-                              //               harga: _get[i]['harga'],
-                              //               ukuran: _get[i]['ukuran'],
-                              //               image: _get[i]['image'],
-                              //               deskripsi: _get[i]['deskripsi'],
-                              //             )));
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Expanded(
-                                  child: Image.network(
-                                    'https://plavon.dlhcode.com/storage/images/barang/${_get[i]['image']}',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                Text(
-                                  '${_get[i]['nama_barang']}',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${_get[i]['harga']}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Status Pengusaha Tanam: ",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
+              SizedBox(height: 100),
+              Row(
+                children: [
+                  Text("Hasil Komoditi:", style: TextStyle(fontSize: 20))
+                ],
+              ),
+              Expanded(
+                flex: 1,
+                child: RefreshIndicator(
+                  onRefresh: refresh,
+                  child: ListView.builder(
+                    itemCount: _get.length,
+                    itemBuilder: (context, index) => Card(
+                      margin: const EdgeInsets.all(10),
+                      elevation: 8,
+                      child: SizedBox(
+                        height: 90,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Color.fromARGB(255, 48, 31, 83),
+                            child: Image.network(
+                              'https://batu.dlhcode.com/upload/produk/${_get[index]['gambar']}',
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.fill,
                             ),
                           ),
-                        ],
+                          title: Text(
+                            _get[index]['nama_komoditi'].toString() +
+                                ' | ' +
+                                _get[index]['status_pengusahaan_tanaman']
+                                    .toString(),
+                            style: new TextStyle(
+                                fontSize: 15.0, fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            _get[index]['status_pengusahaan_tanaman']
+                                .toString(),
+                            maxLines: 2,
+                            style: new TextStyle(fontSize: 14.0),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CountComoditi(
+                                        id: _get[index]['id'].toString(),
+                                      ),
+                                    ));
+                                    // (Route<dynamic> route) => false);
+                              },
+                              child: Text("Input")),
+                        ),
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
-      drawer: MenuPage(),
     );
   }
 }
-// Container(
-//               margin: const EdgeInsets.all(5),
-//               color: Colors.grey,
-//               child: Center(child: Text('${_get[i]['nama_barang']}')),
-//             ),
