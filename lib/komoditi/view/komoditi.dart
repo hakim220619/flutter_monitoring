@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monitoring/home/view/home.dart';
-import 'package:monitoring/komoditi/view/count_comoditi.dart';
+import 'package:monitoring/komoditi/view/addComoditi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -99,7 +99,7 @@ class _KomodityPageState extends State<KomodityPage> {
                           leading: CircleAvatar(
                             backgroundColor: Color.fromARGB(255, 48, 31, 83),
                             child: Image.network(
-                              'https://batu.dlhcode.com/upload/produk/${_get[index]['gambar']}',
+                              'https://monitoring.dlhcode.com/upload/produk/${_get[index]['gambar']}',
                               width: 80,
                               height: 80,
                               fit: BoxFit.fill,
