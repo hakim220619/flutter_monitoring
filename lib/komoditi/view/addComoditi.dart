@@ -35,6 +35,25 @@ class _CountComoditiState extends State<CountComoditi> {
       });
     }
   }
+
+  List kabupaten = [];
+  Future GetKabupaten() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    var baseUrl = "https://monitoring.dlhcode.com/api/kabupaten";
+    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
+      "Accept": "application/json",
+      "Authorization": "Bearer " + token.toString(),
+    });
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      setState(() {
+        kabupaten = jsonData['data'];
+        // print(Kecamatan);
+      });
+    }
+  }
+
   List Kecamatan = [];
   Future GetKecamatan() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -53,28 +72,52 @@ class _CountComoditiState extends State<CountComoditi> {
     }
   }
 
+  List Tahun = [];
+  Future GetTahun() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('token');
+    var baseUrl = "https://monitoring.dlhcode.com/api/tahun";
+    http.Response response = await http.get(Uri.parse(baseUrl), headers: {
+      "Accept": "application/json",
+      "Authorization": "Bearer " + token.toString(),
+    });
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      setState(() {
+        Tahun = jsonData['data'];
+        // print(Kecamatan);
+      });
+    }
+  }
+
   void initState() {
     super.initState();
     GetKecamatan();
     Getprovinsi();
+    GetKabupaten();
+    GetTahun();
   }
 
   Future refresh() async {
     setState(() {
       GetKecamatan();
       Getprovinsi();
-    
+      GetKabupaten();
+      GetTahun();
     });
   }
 
+  String? toProvinsi;
   String? tokecamatan;
-  String? toprovinsi;
+  String? toKabupaten;
+  String? toTahun;
   late String tbm;
   late String tm;
   late String tr;
   late String produksi;
-  late String pekerja;
-  late String tahun;
+  late String Pekebun;
+  late String hasilPanen;
+  late String keterangan;
   bool changebutton = false;
   final _formkey = GlobalKey<FormState>();
   @override
@@ -103,98 +146,175 @@ class _CountComoditiState extends State<CountComoditi> {
                         child: Form(
                           key: _formkey,
                           child: Column(children: [
-                            Row(children: [
-                              Text(
-                                "Prov: ",
-                                style: TextStyle(fontSize: 17),
-                              ),
-                              SizedBox(
-                                width: 250,
-                                height: 60,
-                                child: Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: DropdownButtonFormField(
-                                      decoration: InputDecoration(
-                                          fillColor: Colors.grey.shade100,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          hintText: 'Pilih Provinsi', labelText: 'Masukan Provinsi',
-                                            ),
-                                      isExpanded: true,
-                                      items: provinsi.map((item) {
-                                        return DropdownMenuItem(
-                                          value: item['id'].toString(),
-                                          child: Text(item['nama_provinsi']
-                                              .toString()),
-                                        );
-                                      }).toList(),
-                                      validator: (value) {
-                                        if (value == false)
-                                          return 'Masukan Provinsi';
-                                        return null;
-                                      },
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          toprovinsi = newVal;
-                                          // print(newVal);
-                                        });
-                                      },
-                                      value: tokecamatan,
-                                    ),
-                                  ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Provinsi: ",
+                                  style: TextStyle(fontSize: 18),
                                 ),
-                              ),
-                            ]),
-                            Row(children: [
-                              Text(
-                                "Kec: ",
-                                style: TextStyle(fontSize: 17),
-                              ),
-                              SizedBox(
-                                width: 250,
-                                height: 60,
-                                child: Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: DropdownButtonFormField(
-                                      decoration: InputDecoration(
-                                          fillColor: Colors.grey.shade100,
-                                          filled: true,
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          hintText: 'Pilih Kecamatan', labelText: 'Masukan Kecamatan',
-                                            ),
-                                      isExpanded: true,
-                                      items: Kecamatan.map((item) {
-                                        return DropdownMenuItem(
-                                          value: item['id'].toString(),
-                                          child: Text(item['nama_kecamatan']
-                                              .toString()),
-                                        );
-                                      }).toList(),
-                                      validator: (value) {
-                                        if (value == false)
-                                          return 'Masukan Kecamatan';
-                                        return null;
-                                      },
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          tokecamatan = newVal;
-                                          // print(newVal);
-                                        });
-                                      },
-                                      value: tokecamatan,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ]),
-                            //------Textformfiled code-------------
+                              ],
+                            ),
 
+                            //------Textformfiled code-------------
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                    fillColor: Colors.grey.shade100,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    hintText: 'Pilih Provinsi'),
+                                isExpanded: true,
+                                items: provinsi.map((item) {
+                                  return DropdownMenuItem(
+                                    value: item['id'].toString(),
+                                    child:
+                                        Text(item['nama_provinsi'].toString()),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == false) return 'Masukan Provinsi';
+                                  return null;
+                                },
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    toProvinsi = newVal;
+                                    // print(newVal);
+                                  });
+                                },
+                                value: toProvinsi,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kabupaten: ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+
+                            //------Textformfiled code-------------
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                    fillColor: Colors.grey.shade100,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    hintText: 'Pilih Kabupaten'),
+                                isExpanded: true,
+                                items: kabupaten.map((item) {
+                                  return DropdownMenuItem(
+                                    value: item['id'].toString(),
+                                    child:
+                                        Text(item['nama_kabupaten'].toString()),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == false) return 'Masukan Provinsi';
+                                  return null;
+                                },
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    toKabupaten = newVal;
+                                    // print(newVal);
+                                  });
+                                },
+                                value: toKabupaten,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kecamatan: ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+
+                            //------Textformfiled code-------------
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                    fillColor: Colors.grey.shade100,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    hintText: 'Pilih Kecamatan'),
+                                isExpanded: true,
+                                items: Kecamatan.map((item) {
+                                  return DropdownMenuItem(
+                                    value: item['id'].toString(),
+                                    child:
+                                        Text(item['nama_kecamatan'].toString()),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == false)
+                                    return 'Masukan Kecamatan';
+                                  return null;
+                                },
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    tokecamatan = newVal;
+                                    // print(newVal);
+                                  });
+                                },
+                                value: tokecamatan,
+                              ),
+                            ),
+Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Tahun: ",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+
+                            //------Textformfiled code-------------
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                    fillColor: Colors.grey.shade100,
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    hintText: 'Pilih Tahun'),
+                                isExpanded: true,
+                                items: Tahun.map((item) {
+                                  return DropdownMenuItem(
+                                    value: item['id'].toString(),
+                                    child:
+                                        Text(item['tahun'].toString()),
+                                  );
+                                }).toList(),
+                                validator: (value) {
+                                  if (value == false) return 'Masukan Tahun';
+                                  return null;
+                                },
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    toTahun = newVal;
+                                    // print(newVal);
+                                  });
+                                },
+                                value: toTahun,
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -330,7 +450,39 @@ class _CountComoditiState extends State<CountComoditi> {
                               children: [
                                 Text(
                                   "Hasil Panen: ",
-                                  style: TextStyle(fontSize: 25),
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  height: 60,
+                                  child: Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        obscureText: false,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Masukan Jumlah';
+                                          }
+                                          return null;
+                                        },
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            labelText: 'Masukan jumlah',
+                                            hintText: 'Masukan jumlah'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            hasilPanen = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -374,66 +526,18 @@ class _CountComoditiState extends State<CountComoditi> {
                                 ),
                               ],
                             ),
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       "PEKEBUN: ",
+                            //       style: TextStyle(fontSize: 25),
+                            //     ),
+                            //   ],
+                            // ),
                             Row(
                               children: [
                                 Text(
-                                  "PEKEBUN: ",
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Pekerja: ",
-                                  style: TextStyle(fontSize: 17),
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  height: 60,
-                                  child: Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: TextFormField(
-                                        obscureText: false,
-                                         keyboardType: TextInputType.number,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Masukan Pekerja';
-                                          }
-                                          return null;
-                                        },
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            labelText: 'Masukan Pekerja',
-                                            hintText: 'Masukan Pekerja'),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            pekerja = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "KETERANGAN: ",
-                                  style: TextStyle(fontSize: 25),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Tahun: ",
+                                  "Pekebun: ",
                                   style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
@@ -447,7 +551,7 @@ class _CountComoditiState extends State<CountComoditi> {
                                         obscureText: false,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
-                                            return 'Masukan Tahun';
+                                            return 'Masukan Pekebun';
                                           }
                                           return null;
                                         },
@@ -457,11 +561,52 @@ class _CountComoditiState extends State<CountComoditi> {
                                               borderRadius:
                                                   BorderRadius.circular(20.0),
                                             ),
-                                            labelText: 'Masukan Tahun',
-                                            hintText: 'Masukan Tahun'),
+                                            labelText: 'Masukan Pekebun',
+                                            hintText: 'Masukan Pekebun'),
                                         onChanged: (value) {
                                           setState(() {
-                                            tahun = value;
+                                            Pekebun = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            
+                            
+                            Row(
+                              children: [
+                                Text(
+                                  "Keterangan: ",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  height: 60,
+                                  child: Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: TextFormField(
+                                        obscureText: false,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Masukan Keterangan';
+                                          }
+                                          return null;
+                                        },
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            labelText: 'Masukan Keterangan',
+                                            hintText: 'Masukan Keterangan'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            keterangan = value;
                                           });
                                         },
                                       ),
@@ -481,13 +626,17 @@ class _CountComoditiState extends State<CountComoditi> {
                                 if (_formkey.currentState!.validate()) {
                                   await KomoditiService.send_data(
                                       widget.id,
+                                      toProvinsi,
+                                      toKabupaten,
                                       tokecamatan,
                                       tbm,
                                       tm,
                                       tr,
                                       produksi,
-                                      pekerja,
-                                      tahun,
+                                      Pekebun,
+                                      toTahun,
+                                      hasilPanen,
+                                      keterangan,
                                       context);
 
                                   // Navigator.push(

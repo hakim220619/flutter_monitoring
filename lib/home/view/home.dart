@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _client = http.Client();
 
-  var _logoutUrl = Uri.parse('https://plavon.dlhcode.com/api/logout');
+  var _logoutUrl = Uri.parse('https://monitoring.dlhcode.com/api/logout');
 
   Future Logout() async {
     try {
@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
         "Accept": "application/json",
         "Authorization": "Bearer " + token.toString(),
       });
+      print(response.body);
       if (response.statusCode == 200) {
         SharedPreferences preferences = await SharedPreferences.getInstance();
         setState(() {
@@ -106,10 +107,6 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: KomodityPage(),
-
-      //memberikan button garis tiga disebelah kiri appbar
-      //jika ditekan akan menjalankan widget builddrawer
-      drawer: MenuPage(),
     );
   }
 }
