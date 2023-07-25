@@ -1,11 +1,11 @@
-import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:graphic/graphic.dart';
+import 'package:monitoring/login/models/jumlah_produksi_model.dart';
+import 'package:monitoring/login/models/luas_lahan_model.dart';
+import 'package:monitoring/login/models/tahun_model.dart.dart';
+import 'package:monitoring/login/service/grafik_service.dart';
 import 'package:monitoring/login/view/login.dart';
-
-import '../data.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GrafikPage extends StatefulWidget {
   const GrafikPage({Key? key}) : super(key: key);
@@ -16,46 +16,14 @@ class GrafikPage extends StatefulWidget {
 
 class GrafikPageState extends State<GrafikPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final service = GrafikService();
 
-  final rdm = Random();
-
-  List<Map> data = [];
-
-  late Timer timer;
-
-  final priceVolumeStream = StreamController<GestureEvent>.broadcast();
-
-  final heatmapStream = StreamController<Selected?>.broadcast();
+  String dropdownValue = '1';
 
   @override
   void initState() {
-    data = [
-      {'genre': 'Sports', 'sold': rdm.nextInt(300)},
-      {'genre': 'Strategy', 'sold': rdm.nextInt(300)},
-      {'genre': 'Action', 'sold': rdm.nextInt(300)},
-      {'genre': 'Shooter', 'sold': rdm.nextInt(300)},
-      {'genre': 'Other', 'sold': rdm.nextInt(300)},
-    ];
-
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() {
-        data = [
-          {'genre': 'Sports', 'sold': rdm.nextInt(300)},
-          {'genre': 'Strategy', 'sold': rdm.nextInt(300)},
-          {'genre': 'Action', 'sold': rdm.nextInt(300)},
-          {'genre': 'Shooter', 'sold': rdm.nextInt(300)},
-          {'genre': 'Other', 'sold': rdm.nextInt(300)},
-        ];
-      });
-    });
-
+    service.fetchTahun();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 
   @override
@@ -94,52 +62,122 @@ class GrafikPageState extends State<GrafikPage> {
                     '- The above and below heatmaps share the same selection stream. Tap either one to try.',
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  width: 350,
-                  height: 200,
-                  child: Chart(
-                    padding: (_) => EdgeInsets.zero,
-                    data: heatmapData,
-                    variables: {
-                      'name': Variable(
-                        accessor: (List datum) => datum[0].toString(),
-                      ),
-                      'day': Variable(
-                        accessor: (List datum) => datum[1].toString(),
-                      ),
-                      'sales': Variable(
-                        accessor: (List datum) => datum[2] as num,
-                      ),
-                    },
-                    marks: [
-                      PolygonMark(
-                        shape: ShapeEncode(value: HeatmapShape(sector: true)),
-                        color: ColorEncode(
-                          variable: 'sales',
-                          values: [
-                            const Color(0xffbae7ff),
-                            const Color(0xff1890ff),
-                            const Color(0xff0050b3)
-                          ],
-                          updaters: {
-                            'tap': {false: (color) => color.withAlpha(70)}
-                          },
-                        ),
-                        selectionStream: heatmapStream,
-                      )
-                    ],
-                    coord: PolarCoord(),
-                    selections: {'tap': PointSelection()},
-                    tooltip: TooltipGuide(
-                      anchor: (_) => Offset.zero,
-                      align: Alignment.bottomRight,
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: getTahunFutureBuilderWidget(),
                 ),
+                const SizedBox(height: 8,),
+                getLuasLahanFutureBuilderWidget(),
+                getJumlahProduksiFutureBuilderWidget()
               ],
             ))),
       ),
+    );
+  }
+
+  FutureBuilder<JumlahProduksi> getJumlahProduksiFutureBuilderWidget() {
+    return FutureBuilder<JumlahProduksi>(
+      future: service.fetchJumlahProduksi(dropdownValue),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+         return Column(
+          children: [
+            SfCircularChart(
+              title: ChartTitle(
+                text: 'Pie Chart Jumlah Produksi'
+              ),
+              legend: const Legend(
+                isVisible: true,
+                position: LegendPosition.bottom
+              ),
+              series: <CircularSeries>[
+                PieSeries<JumlahProduksiData, String>(
+                  dataSource: snapshot.data!.data,
+                  xValueMapper: (JumlahProduksiData luasLahan, _) => luasLahan.namaKomoditi,
+                  yValueMapper: (JumlahProduksiData luasLahan, _) => double.parse(luasLahan.jumlahProduksi),
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    textStyle: TextStyle(
+                      color: Colors.white
+                    )
+                  )
+                )
+              ],
+            )
+          ],
+         );
+        } else if (snapshot.hasError){
+          return Text(snapshot.error.toString());
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  FutureBuilder<LuasLahan> getLuasLahanFutureBuilderWidget() {
+    return FutureBuilder<LuasLahan>(
+      future: service.fetchLuasLahan(dropdownValue),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+         return Column(
+          children: [
+            SfCircularChart(
+              title: ChartTitle(
+                text: 'Pie Chart Luas Lahan'
+              ),
+              legend: const Legend(
+                isVisible: true,
+                position: LegendPosition.bottom
+              ),
+              series: <CircularSeries>[
+                PieSeries<LuasLahanData, String>(
+                  dataSource: snapshot.data!.data,
+                  xValueMapper: (LuasLahanData luasLahan, _) => luasLahan.namaKomoditi,
+                  yValueMapper: (LuasLahanData luasLahan, _) => double.parse(luasLahan.luasArea),
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    textStyle: TextStyle(
+                      color: Colors.white
+                    )
+                  )
+                )
+              ],
+            )
+          ],
+         );
+        } else if (snapshot.hasError){
+          return Text(snapshot.error.toString());
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  FutureBuilder<Tahun> getTahunFutureBuilderWidget() {
+    return FutureBuilder<Tahun>(
+      future: service.fetchTahun(),
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          return DropdownButtonFormField(
+            hint: const Text('Pilih tahun'),
+            items: snapshot.data!.data.map<DropdownMenuItem<String>>((TahunData value) {
+              return DropdownMenuItem<String>(
+                value: value.id,
+                child: Text(value.tahun),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                dropdownValue = value!;
+              });
+              service.fetchLuasLahan(dropdownValue);
+            },
+          );
+        } else if (snapshot.hasError){
+          return Text(snapshot.error.toString());
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
