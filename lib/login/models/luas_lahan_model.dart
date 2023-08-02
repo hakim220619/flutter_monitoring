@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final luasLahan = luasLahanFromJson(jsonString);
-
 import 'dart:convert';
 
 LuasLahan luasLahanFromJson(String str) => LuasLahan.fromJson(json.decode(str));

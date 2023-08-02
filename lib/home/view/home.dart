@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
         "Accept": "application/json",
         "Authorization": "Bearer " + token.toString(),
       });
-      print(response.body);
       if (response.statusCode == 200) {
         SharedPreferences preferences = await SharedPreferences.getInstance();
         setState(() {
@@ -36,7 +35,6 @@ class _HomePageState extends State<HomePage> {
           preferences.remove("is_login");
           preferences.remove("token");
         });
-
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -44,7 +42,6 @@ class _HomePageState extends State<HomePage> {
           ),
           (route) => false,
         );
-        // Navigator.of(context).pop();
       }
     } catch (e) {
       print(e);
@@ -94,8 +91,6 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               _showMyDialog('Log Out', 'Are you sure you want to logout?', 'No',
                   'Yes', () async {}, false);
-
-              // ignore: unused_label
               child:
               Text(
                 'Log Out',

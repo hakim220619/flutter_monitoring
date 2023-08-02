@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-// ignore: unused_import
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:monitoring/login/service/service_page.dart';
-// ignore: unused_import
 import 'package:monitoring/login/widget/login_widget.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,9 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailEditController = TextEditingController();
   late String email;
   late String password;
-
-  // static const IconData directions_car =
-  //     IconData(0xe1d7, fontFamily: 'MaterialIcons');
   @override
   void initState() {
     super.initState();
@@ -137,7 +132,6 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 100,
           ),
-          // LoginWidget()
         ],
       ),
     );

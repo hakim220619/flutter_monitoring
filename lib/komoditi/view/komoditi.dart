@@ -27,17 +27,12 @@ class _KomodityPageState extends State<KomodityPage> {
         "Accept": "application/json",
         "Authorization": "Bearer " + token.toString(),
       });
-      // print(id_user);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-// print(data['data']);
         setState(() {
           _get = data['data'];
           print(_get);
         });
-        // print(_get[0]['order_id']);
-
-        // print(data);
       }
     } catch (e) {
       print(e);
@@ -131,7 +126,6 @@ class _KomodityPageState extends State<KomodityPage> {
                                         id: _get[index]['id'].toString(),
                                       ),
                                     ));
-                                    // (Route<dynamic> route) => false);
                               },
                               child: Text("Input")),
                         ),

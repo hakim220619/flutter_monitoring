@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final tahun = tahunFromJson(jsonString);
-
 import 'dart:convert';
 
 Tahun tahunFromJson(String str) => Tahun.fromJson(json.decode(str));

@@ -31,7 +31,6 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         provinsi = jsonData['data'];
-        // print(Kecamatan);
       });
     }
   }
@@ -49,7 +48,6 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         kabupaten = jsonData['data'];
-        // print(Kecamatan);
       });
     }
   }
@@ -67,7 +65,6 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         Kecamatan = jsonData['data'];
-        // print(Kecamatan);
       });
     }
   }
@@ -85,7 +82,6 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         Tahun = jsonData['data'];
-        // print(Kecamatan);
       });
     }
   }
@@ -155,8 +151,6 @@ class _CountComoditiState extends State<CountComoditi> {
                                 ),
                               ],
                             ),
-
-                            //------Textformfiled code-------------
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
@@ -182,7 +176,6 @@ class _CountComoditiState extends State<CountComoditi> {
                                 onChanged: (newVal) {
                                   setState(() {
                                     toProvinsi = newVal;
-                                    // print(newVal);
                                   });
                                 },
                                 value: toProvinsi,
@@ -197,8 +190,6 @@ class _CountComoditiState extends State<CountComoditi> {
                                 ),
                               ],
                             ),
-
-                            //------Textformfiled code-------------
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
@@ -239,8 +230,6 @@ class _CountComoditiState extends State<CountComoditi> {
                                 ),
                               ],
                             ),
-
-                            //------Textformfiled code-------------
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
@@ -267,7 +256,7 @@ class _CountComoditiState extends State<CountComoditi> {
                                 onChanged: (newVal) {
                                   setState(() {
                                     tokecamatan = newVal;
-                                    // print(newVal);
+                              
                                   });
                                 },
                                 value: tokecamatan,
@@ -283,7 +272,7 @@ Row(
                               ],
                             ),
 
-                            //------Textformfiled code-------------
+                          
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
@@ -309,7 +298,7 @@ Row(
                                 onChanged: (newVal) {
                                   setState(() {
                                     toTahun = newVal;
-                                    // print(newVal);
+                                  
                                   });
                                 },
                                 value: toTahun,
@@ -526,14 +515,6 @@ Row(
                                 ),
                               ],
                             ),
-                            // Row(
-                            //   children: [
-                            //     Text(
-                            //       "PEKEBUN: ",
-                            //       style: TextStyle(fontSize: 25),
-                            //     ),
-                            //   ],
-                            // ),
                             Row(
                               children: [
                                 Text(
@@ -638,21 +619,6 @@ Row(
                                       hasilPanen,
                                       keterangan,
                                       context);
-
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (
-                                  //         context,
-                                  //       ) =>
-                                  //           ListOutPage(
-                                  //         KecamatanValue: KecamatanValue,
-                                  //         toAgentValue: toAgentValue,
-                                  //         dateofJourney:
-                                  //             dateofJourney.text,
-                                  //         email: "",
-                                  //       ),
-                                  //     ));
                                 }
                               },
                               child: AnimatedContainer(

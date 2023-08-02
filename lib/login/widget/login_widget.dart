@@ -17,12 +17,6 @@ class LoginWidget extends StatelessWidget {
                           Color.fromARGB(255, 13, 219, 6)),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const RegisterPage(),
-                      //   ),
-                      // );
                     },
                     child: const Text(
                       'Registrasi',
@@ -35,12 +29,6 @@ class LoginWidget extends StatelessWidget {
                           Color.fromARGB(255, 12, 12, 7)),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => TiketPage(),
-                      //   ),
-                      // );
                     },
                     child: const Text('Cetak Tiket'),
                   ),
@@ -50,12 +38,6 @@ class LoginWidget extends StatelessWidget {
                           Color.fromARGB(255, 231, 3, 3)),
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const Add(),
-                      //   ),
-                      // );
                     },
                     child: const Text('Pesan Tiket'),
                   ),

@@ -35,10 +35,8 @@ class KomoditiService {
       "status": '1',
       "keterangan": keterangan.toString(),
     });
-    print(response.body);
     if (response.statusCode == 200) {
       var rekap = jsonDecode(response.body);
-      
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

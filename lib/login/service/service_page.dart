@@ -11,12 +11,10 @@ class HttpService {
 
   static var _loginUrl = Uri.parse('https://monitoring.dlhcode.com/api/login');
   static login(email, password, context) async {
-    // bool isLoading = false;
     http.Response response = await _client
         .post(_loginUrl, body: {"email": email, "password": password});
     if (response.statusCode == 200) {
       var Users = jsonDecode(response.body);
-      // print(Users);
       SharedPreferences pref = await SharedPreferences.getInstance();
       await pref.setString("email", email);
       await pref.setString("id_user", Users['user']['id'].toString());
