@@ -359,10 +359,10 @@ Row(
                               children: [
                                 Text(
                                   "TM: ",
-                                  style: TextStyle(fontSize: 17),
+                                  style: TextStyle(fontSize: 17)
                                 ),
                                 SizedBox(
-                                  width: 250,
+                                  width: 260,
                                   height: 60,
                                   child: Flexible(
                                     child: Padding(
@@ -402,7 +402,7 @@ Row(
                                   style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
-                                  width: 250,
+                                  width: 263,
                                   height: 60,
                                   child: Flexible(
                                     child: Padding(
@@ -435,46 +435,7 @@ Row(
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Hasil Panen: ",
-                                  style: TextStyle(fontSize: 17),
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  height: 60,
-                                  child: Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        obscureText: false,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Masukan Jumlah';
-                                          }
-                                          return null;
-                                        },
-                                        maxLines: 1,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            labelText: 'Masukan jumlah',
-                                            hintText: 'Masukan jumlah'),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            hasilPanen = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            
                             Row(
                               children: [
                                 Text(
@@ -482,7 +443,7 @@ Row(
                                   style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
-                                  width: 200,
+                                  width: 220,
                                   height: 60,
                                   child: Flexible(
                                     child: Padding(
@@ -522,7 +483,7 @@ Row(
                                   style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
-                                  width: 200,
+                                  width: 220,
                                   height: 60,
                                   child: Flexible(
                                     child: Padding(
@@ -616,7 +577,6 @@ Row(
                                       produksi,
                                       Pekebun,
                                       toTahun,
-                                      hasilPanen,
                                       keterangan,
                                       context);
                                 }

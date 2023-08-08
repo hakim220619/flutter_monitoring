@@ -94,7 +94,7 @@ class _KomodityPageState extends State<KomodityPage> {
                           leading: CircleAvatar(
                             backgroundColor: Color.fromARGB(255, 48, 31, 83),
                             child: Image.network(
-                              'https://monitoring.dlhcode.com/upload/produk/${_get[index]['gambar']}',
+                              'https://monitoring.dlhcode.com/images/${_get[index]['gambar']}',
                               width: 80,
                               height: 80,
                               fit: BoxFit.fill,

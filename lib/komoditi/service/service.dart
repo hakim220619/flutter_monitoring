@@ -13,7 +13,7 @@ class KomoditiService {
   static var _tambahRekap =
       Uri.parse('https://monitoring.dlhcode.com/api/tambah_rekapan');
   static send_data(id, provinsi, kabupaten, Kecamatan, tbm, tm, tr, produksi,
-      Pekebun, tahun, hasilPanen, keterangan, context) async {
+      Pekebun, tahun, keterangan, context) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
 
       var token = preferences.getString('token');
@@ -29,7 +29,6 @@ class KomoditiService {
       "tbm": tbm.toString(),
       "tm": tm.toString(),
       "tr": tr.toString(),
-      "jumlah": hasilPanen.toString(),
       "produksi": produksi.toString(),
       "pekebun": Pekebun.toString(),
       "status": '1',
