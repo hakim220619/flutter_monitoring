@@ -64,16 +64,8 @@ class _KomodityPageState extends State<KomodityPage> {
                 "Rekap Hasil Komoditi",
                 style: TextStyle(fontSize: 30),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Status Pengusaha Tanam: ",
-                    style: TextStyle(fontSize: 17),
-                  ),
-                ],
-              ),
-              SizedBox(height: 100),
+              
+              SizedBox(height: 10),
               Row(
                 children: [
                   Text("Hasil Komoditi:", style: TextStyle(fontSize: 20))
@@ -125,6 +117,7 @@ class _KomodityPageState extends State<KomodityPage> {
                                       builder: (context) => CountComoditi(
                                         id: _get[index]['id'].toString(),
                                         nama_komoditi: _get[index]['nama_komoditi'].toString(),
+                                        status_pengusahaan_tanaman: _get[index]['status_pengusahaan_tanaman'].toString(),
                                       ),
                                     ));
                               },

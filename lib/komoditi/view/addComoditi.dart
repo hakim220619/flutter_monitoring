@@ -11,9 +11,11 @@ class CountComoditi extends StatefulWidget {
     Key? key,
     required this.id,
     required this.nama_komoditi,
+    required this.status_pengusahaan_tanaman,
   }) : super(key: key);
   final String id;
   final String nama_komoditi;
+  final String status_pengusahaan_tanaman;
 
   @override
   State<CountComoditi> createState() => _CountComoditiState();
@@ -137,6 +139,11 @@ class _CountComoditiState extends State<CountComoditi> {
                     Text(
                       "Komoditi ${widget.nama_komoditi.toString()}",
                       style: TextStyle(fontSize: 30),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      "SPT: ${widget.status_pengusahaan_tanaman.toString()}",
+                      style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(height: 20),
                     Container(
