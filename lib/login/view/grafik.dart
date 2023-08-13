@@ -31,7 +31,8 @@ class GrafikPageState extends State<GrafikPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Dynamic'),
+        centerTitle: true,
+        title: const Text('Grafik'),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -51,7 +52,7 @@ class GrafikPageState extends State<GrafikPage> {
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 40, 20, 5),
                   child: const Text(
-                    'Selection Stream coupling',
+                    'Tap to Login',
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
@@ -59,7 +60,7 @@ class GrafikPageState extends State<GrafikPage> {
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    '- The above and below heatmaps share the same selection stream. Tap either one to try.',
+                    '',
                   ),
                 ),
                 Padding(

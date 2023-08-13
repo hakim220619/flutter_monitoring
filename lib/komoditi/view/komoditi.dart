@@ -31,7 +31,7 @@ class _KomodityPageState extends State<KomodityPage> {
         final data = jsonDecode(response.body);
         setState(() {
           _get = data['data'];
-          print(_get);
+          // print(_get);
         });
       }
     } catch (e) {
@@ -124,6 +124,7 @@ class _KomodityPageState extends State<KomodityPage> {
                                     MaterialPageRoute(
                                       builder: (context) => CountComoditi(
                                         id: _get[index]['id'].toString(),
+                                        nama_komoditi: _get[index]['nama_komoditi'].toString(),
                                       ),
                                     ));
                               },

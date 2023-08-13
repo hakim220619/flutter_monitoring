@@ -10,8 +10,10 @@ class CountComoditi extends StatefulWidget {
   const CountComoditi({
     Key? key,
     required this.id,
+    required this.nama_komoditi,
   }) : super(key: key);
   final String id;
+  final String nama_komoditi;
 
   @override
   State<CountComoditi> createState() => _CountComoditiState();
@@ -133,7 +135,7 @@ class _CountComoditiState extends State<CountComoditi> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Komoditi Sawit",
+                      "Komoditi ${widget.nama_komoditi.toString()}",
                       style: TextStyle(fontSize: 30),
                     ),
                     SizedBox(height: 20),
