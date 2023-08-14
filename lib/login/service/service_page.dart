@@ -20,13 +20,15 @@ class HttpService {
       await pref.setString("id_user", Users['user']['id'].toString());
       await pref.setString("token", Users['data']);
       await pref.setBool("is_login", true);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => HomePage(),
-        ),
-        (route) => false,
-      );
+      if (Users['user']['role'].toString() == "2") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => HomePage(),
+          ),
+          (route) => false,
+        );
+      }
     }
   }
 }
