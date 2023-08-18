@@ -93,14 +93,14 @@ class GrafikPageState extends State<GrafikPage> {
               ),
               series: <CircularSeries>[
                 PieSeries<JumlahProduksiData, String>(
+                  explode: true,
+                  explodeAll: true,
                   dataSource: snapshot.data!.data,
                   xValueMapper: (JumlahProduksiData luasLahan, _) => luasLahan.namaKomoditi,
                   yValueMapper: (JumlahProduksiData luasLahan, _) => double.parse(luasLahan.jumlahProduksi),
                   dataLabelSettings: const DataLabelSettings(
                     isVisible: true,
-                    textStyle: TextStyle(
-                      color: Colors.white
-                    )
+                    labelPosition: ChartDataLabelPosition.outside,
                   )
                 )
               ],
@@ -132,14 +132,14 @@ class GrafikPageState extends State<GrafikPage> {
               ),
               series: <CircularSeries>[
                 PieSeries<LuasLahanData, String>(
+                  explode: true,
+                  explodeAll: true,
                   dataSource: snapshot.data!.data,
                   xValueMapper: (LuasLahanData luasLahan, _) => luasLahan.namaKomoditi,
                   yValueMapper: (LuasLahanData luasLahan, _) => double.parse(luasLahan.luasArea),
                   dataLabelSettings: const DataLabelSettings(
                     isVisible: true,
-                    textStyle: TextStyle(
-                      color: Colors.white
-                    )
+                    labelPosition: ChartDataLabelPosition.outside,
                   )
                 )
               ],
