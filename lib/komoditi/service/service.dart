@@ -15,7 +15,7 @@ class KomoditiService {
   static send_data(id, provinsi, kabupaten, Kecamatan, tbm, tm, tr, produksi,
       Pekebun, tahun, keterangan, context) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-
+print(provinsi);
       var token = preferences.getString('token');
     http.Response response = await _client.post(_tambahRekap,headers: {
         "Accept": "application/json",

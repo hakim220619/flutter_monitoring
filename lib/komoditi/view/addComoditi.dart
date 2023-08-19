@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:monitoring/komoditi/service/service.dart';
@@ -35,6 +37,7 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         provinsi = jsonData['data'];
+        // print(provinsi);
       });
     }
   }
@@ -57,10 +60,10 @@ class _CountComoditiState extends State<CountComoditi> {
   }
 
   List Kecamatan = [];
-  Future GetKecamatan() async {
+  Future GetKecamatan(param) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var token = preferences.getString('token');
-    var baseUrl = "https://monitoring.dlhcode.com/api/kecamatan";
+    var baseUrl = "https://monitoring.dlhcode.com/api/kecamatan_by_kabupaten/${param}";
     http.Response response = await http.get(Uri.parse(baseUrl), headers: {
       "Accept": "application/json",
       "Authorization": "Bearer " + token.toString(),
@@ -69,6 +72,7 @@ class _CountComoditiState extends State<CountComoditi> {
       var jsonData = json.decode(response.body);
       setState(() {
         Kecamatan = jsonData['data'];
+        print(Kecamatan);
       });
     }
   }
@@ -92,7 +96,7 @@ class _CountComoditiState extends State<CountComoditi> {
 
   void initState() {
     super.initState();
-    GetKecamatan();
+    // GetKecamatan();
     Getprovinsi();
     GetKabupaten();
     GetTahun();
@@ -100,14 +104,14 @@ class _CountComoditiState extends State<CountComoditi> {
 
   Future refresh() async {
     setState(() {
-      GetKecamatan();
+      // GetKecamatan();
       Getprovinsi();
       GetKabupaten();
       GetTahun();
     });
   }
 
-  String? toProvinsi;
+  var toProvinsi = 1;
   String? tokecamatan;
   String? toKabupaten;
   String? toTahun;
@@ -151,44 +155,42 @@ class _CountComoditiState extends State<CountComoditi> {
                         child: Form(
                           key: _formkey,
                           child: Column(children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Provinsi: ",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
                             Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    fillColor: Colors.grey.shade100,
-                                    filled: true,
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    hintText: 'Pilih Provinsi'),
-                                isExpanded: true,
-                                items: provinsi.map((item) {
-                                  return DropdownMenuItem(
-                                    value: item['id'].toString(),
-                                    child:
-                                        Text(item['nama_provinsi'].toString()),
-                                  );
-                                }).toList(),
-                                validator: (value) {
-                                  if (value == false) return 'Masukan Provinsi';
-                                  return null;
-                                },
-                                onChanged: (newVal) {
-                                  setState(() {
-                                    toProvinsi = newVal;
-                                  });
-                                },
-                                value: toProvinsi,
-                              ),
+                              child: SizedBox(
+                                  width: 400,
+                                  height: 80,
+                                  child: Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: TextFormField(
+                                        enabled: false,
+                                        initialValue: "Kalimantan Tengah",
+                                        obscureText: false,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Provinsi';
+                                          }
+                                          return null;
+                                        },
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            labelText: 'Provinsi',
+                                            hintText: 'Provinsi'),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            toProvinsi = 1;
+                                          });
+                                        },
+                                        
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -224,6 +226,8 @@ class _CountComoditiState extends State<CountComoditi> {
                                 onChanged: (newVal) {
                                   setState(() {
                                     toKabupaten = newVal;
+                                    GetKecamatan(newVal);
+                                    tokecamatan = null;
                                     // print(newVal);
                                   });
                                 },
@@ -577,7 +581,7 @@ Row(
                                 if (_formkey.currentState!.validate()) {
                                   await KomoditiService.send_data(
                                       widget.id,
-                                      toProvinsi,
+                                      toProvinsi = 1,
                                       toKabupaten,
                                       tokecamatan,
                                       tbm,
