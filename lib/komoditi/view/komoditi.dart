@@ -21,11 +21,11 @@ class _KomodityPageState extends State<KomodityPage> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
 
       var token = preferences.getString('token');
-      var _riwayatTiket =
+      var riwayatTiket =
           Uri.parse('https://monitoring.dlhcode.com/api/komoditi');
-      http.Response response = await http.get(_riwayatTiket, headers: {
+      http.Response response = await http.get(riwayatTiket, headers: {
         "Accept": "application/json",
-        "Authorization": "Bearer " + token.toString(),
+        "Authorization": "Bearer $token",
       });
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -35,6 +35,7 @@ class _KomodityPageState extends State<KomodityPage> {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
@@ -45,6 +46,7 @@ class _KomodityPageState extends State<KomodityPage> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     riwayatTiket();
@@ -60,13 +62,13 @@ class _KomodityPageState extends State<KomodityPage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Rekap Hasil Komoditi",
                 style: TextStyle(fontSize: 30),
               ),
               
-              SizedBox(height: 10),
-              Row(
+              const SizedBox(height: 10),
+              const Row(
                 children: [
                   Text("Hasil Komoditi:", style: TextStyle(fontSize: 20))
                 ],
@@ -84,7 +86,7 @@ class _KomodityPageState extends State<KomodityPage> {
                         height: 90,
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Color.fromARGB(255, 48, 31, 83),
+                            backgroundColor: const Color.fromARGB(255, 48, 31, 83),
                             child: Image.network(
                               'https://monitoring.dlhcode.com/images/${_get[index]['gambar']}',
                               width: 80,
@@ -93,11 +95,8 @@ class _KomodityPageState extends State<KomodityPage> {
                             ),
                           ),
                           title: Text(
-                            _get[index]['nama_komoditi'].toString() +
-                                ' | ' +
-                                _get[index]['status_pengusahaan_tanaman']
-                                    .toString(),
-                            style: new TextStyle(
+                            '${_get[index]['nama_komoditi']} | ${_get[index]['status_pengusahaan_tanaman']}',
+                            style: const TextStyle(
                                 fontSize: 15.0, fontWeight: FontWeight.bold),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -106,7 +105,7 @@ class _KomodityPageState extends State<KomodityPage> {
                             _get[index]['status_pengusahaan_tanaman']
                                 .toString(),
                             maxLines: 2,
-                            style: new TextStyle(fontSize: 14.0),
+                            style: const TextStyle(fontSize: 14.0),
                             overflow: TextOverflow.ellipsis,
                           ),
                           trailing: ElevatedButton(
@@ -121,7 +120,7 @@ class _KomodityPageState extends State<KomodityPage> {
                                       ),
                                     ));
                               },
-                              child: Text("Input")),
+                              child: const Text("Input")),
                         ),
                       ),
                     ),

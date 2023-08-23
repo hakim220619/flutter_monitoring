@@ -13,7 +13,7 @@ class LogoPage extends StatelessWidget {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => GrafikPage(),
+              builder: (BuildContext context) => const GrafikPage(),
             ),
             (route) => false,
           );
@@ -22,7 +22,7 @@ class LogoPage extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           width: screenWidth,
           height: 300,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
           child: Center(

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:monitoring/login/service/service_page.dart';
-import 'package:monitoring/login/widget/login_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -24,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     _passwordVisible = false;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -36,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(10),
             width: 200,
             height: 150,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
             child: Center(
@@ -45,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 80,
           ),
           Container(
